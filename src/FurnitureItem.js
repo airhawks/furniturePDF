@@ -52,7 +52,7 @@ export default function FurnitureItem({ item }) {
   );
 
   const firstPageBottomImages = imgs.slice(2, 4);
-  const secondPageMiddleImages = imgs.slice(4);
+  const secondPageMiddleImages = imgs.slice(4, 6);
   const secondPageTopImage = imgs[1];
   const finishDetails = item.description[2].split(":");
   return (
