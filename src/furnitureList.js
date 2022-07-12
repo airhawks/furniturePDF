@@ -101,8 +101,18 @@ const list = json.slice(1).map((row) => {
   }, {});
 });
 
+const deadImages = {
+  "https://www.mordecor.in/wp-content/uploads/2020/12/Outline-4.jpg":
+    "https://www.mordecor.in/wp-content/uploads/2020/12/Outline_main-4.jpg",
+  "https://www.mordecor.in/wp-content/uploads/2020/12/outline.jpg":
+    "https://www.mordecor.in/wp-content/uploads/2021/01/Atlas-sofa.jpg"
+};
+
 list.forEach((item) => {
   item.img = item.img.filter((img) => !faltuImages.includes(img));
+  item.img = item.img.map((i) =>
+    Object.keys(deadImages).includes(i) ? deadImages[i] : i
+  );
 });
 
 export default list;

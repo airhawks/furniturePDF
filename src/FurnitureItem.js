@@ -1,45 +1,82 @@
 import "./styles.css";
 
-const getOutLineImages = (imgs) => {
-  try {
-    let possibleOutlineImages = imgs.filter(
-      (img) =>
-        !img.toLowerCase().includes("zoom") &&
-        (img.toLowerCase().includes("outline") ||
-          img.toLowerCase().includes("sofa"))
-    );
-    // console.log(possibleOutlineImages);
-    if (possibleOutlineImages.length > 2) {
-      possibleOutlineImages = possibleOutlineImages.filter(
-        (x) => !x.includes("-sofa")
-      );
-      console.log("filter", possibleOutlineImages);
-    }
+const hasStringOutLine = (img) =>
+  img.toLowerCase().includes("outlie") || img.toLowerCase().includes("outline");
 
-    const img1 = possibleOutlineImages[0],
-      img2 = possibleOutlineImages[1];
-    if (
-      img1.toLowerCase().includes("outline") &&
-      img2.toLowerCase().includes("outline")
-    ) {
-      if (img1.toLowerCase().includes("outline_image")) {
-        return [img2, img1];
-      } else if (img1.toLowerCase().includes("outline_image")) {
-        return [img1, img2];
-      } else {
-        console.log("new case with outline", possibleOutlineImages, imgs);
-      }
+const getOutLineImages = (imgs) => {
+  let possibleOutlineImages;
+  // try {
+  possibleOutlineImages = imgs.filter(
+    (img) =>
+      !img
+        .match(/([^\/]+$)/)[0]
+        .toLowerCase()
+        .includes("zoom") &&
+      (hasStringOutLine(img) || img.includes("sofa"))
+  );
+  if (possibleOutlineImages.length > 2) {
+    const anotherPossibleOutlineImages = possibleOutlineImages.filter(
+      (x) => !x.includes("-sofa")
+    );
+    if (anotherPossibleOutlineImages.length > 1) {
+      possibleOutlineImages = anotherPossibleOutlineImages;
     } else {
-      if (img1.toLowerCase().includes("outline")) {
-        return [img1, img2];
-      } else if (img2.toLowerCase().includes("outline")) {
-        return [img2, img1];
-      } else {
-        console.log("new case", possibleOutlineImages, imgs);
+      let img1 = possibleOutlineImages.find(hasStringOutLine);
+      if (img1 == null) {
+        img1 = possibleOutlineImages.find((x) =>
+          x.toLowerCase().includes("out")
+        );
       }
+      const img2 = possibleOutlineImages.filter((x) => x !== img1)[0];
+      // console.log("possibleOutlineImages ", img2, img1);
+      return [img1, img2];
     }
-  } catch (e) {
-    console.log("error", imgs, e);
+  } else if (possibleOutlineImages.length < 2) {
+    let img = possibleOutlineImages[0];
+
+    let name = img.match(/([^\/]+$)/)[0];
+
+    name = name.replace("-L-sofa", "");
+    name = name.replace("_Outline1", "");
+    name = name.replace("-Outline-1", "");
+    name = name.replace("-Outline", "");
+    name = name.replace("Outline-", "");
+    name = name.replace("_Outline", "");
+    name = name.replace("Outline_", "");
+    name = name.replace("Outline", "");
+    name = name.replace(".jpg", "").toLowerCase();
+
+    const img2 = imgs.filter(
+      (x) =>
+        x.toLowerCase().includes(name) && x !== img && !x.includes("Zoomed")
+    );
+
+    return [img, img2[0]];
+  }
+
+  const img1 = possibleOutlineImages[0],
+    img2 = possibleOutlineImages[1];
+
+  if (img1 == null || img2 == null) {
+    console.log("yaha pee", possibleOutlineImages, imgs);
+    return ["", ""];
+  }
+
+  if (hasStringOutLine(img1) && hasStringOutLine(img2)) {
+    if (hasStringOutLine(img1)) {
+      return [img2, img1];
+    } else if (hasStringOutLine(img2)) {
+      return [img1, img2];
+    } else {
+      // console.log("new case with outline", possibleOutlineImages, imgs);
+    }
+  } else {
+    if (hasStringOutLine(img1)) {
+      return [img1, img2];
+    } else if (hasStringOutLine(img2)) {
+      return [img2, img1];
+      // console.log("new case", possibleOutlineImages, imgs);
+    }
   }
   return ["", ""];
 };
@@ -54,7 +91,19 @@ export default function FurnitureItem({ item }) {
   const firstPageBottomImages = imgs.slice(2, 4);
   const secondPageMiddleImages = imgs.slice(4, 6);
   const secondPageTopImage = imgs[1];
-  const finishDetails = item.description[2].split(":");
+  let finishDetails = "x: b";
+  try {
+    finishDetails = item.description[2].split(":").map((x) => x.trim());
+  } catch {
+    item.description[1] = item.description[1].replace("Read more ", "");
+    const description = item.description[1]
+      .replace("ITEM CODE :", "")
+      .replace("FINISH", "");
+    const splits = description.split(":").map((x) => x.trim());
+    item.description[1] = "ITEM CODE :" + splits[0];
+    item.description[2] = "FINISH :" + splits[1];
+    finishDetails = ["FINISH", splits[1]];
+  }
   return (
     <div className="FurnitureItem">
       <div className="FurnitureItem_ViewPortPage">
@@ -123,10 +172,12 @@ export default function FurnitureItem({ item }) {
             <div className="FurnitureItem-Page2_Dimensions">
               <h2> Dimensions </h2>
               {item.dimensions.join(" | ")}
-              <div className="FurnitureItem-Page2_Finish">
-                <h3>{finishDetails[0] + ":"}</h3>
-                {finishDetails[1]}
-              </div>
+              {finishDetails.length > 1 ? (
+                <div className="FurnitureItem-Page2_Finish">
+                  <h3>{finishDetails[0] + ":"}</h3>
+                  {finishDetails[1]}
+                </div>
+              ) : null}
             </div>
           </div>
         </div>
