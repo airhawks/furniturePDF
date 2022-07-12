@@ -1,11 +1,59 @@
 import "./styles.css";
 
+const getOutLineImages = (imgs) => {
+  try {
+    let possibleOutlineImages = imgs.filter(
+      (img) =>
+        !img.toLowerCase().includes("zoom") &&
+        (img.toLowerCase().includes("outline") ||
+          img.toLowerCase().includes("sofa"))
+    );
+    // console.log(possibleOutlineImages);
+    if (possibleOutlineImages.length > 2) {
+      possibleOutlineImages = possibleOutlineImages.filter(
+        (x) => !x.includes("-sofa")
+      );
+      console.log("filter", possibleOutlineImages);
+    }
+
+    const img1 = possibleOutlineImages[0],
+      img2 = possibleOutlineImages[1];
+    if (
+      img1.toLowerCase().includes("outline") &&
+      img2.toLowerCase().includes("outline")
+    ) {
+      if (img1.toLowerCase().includes("outline_image")) {
+        return [img2, img1];
+      } else if (img1.toLowerCase().includes("outline_image")) {
+        return [img1, img2];
+      } else {
+        console.log("new case with outline", possibleOutlineImages, imgs);
+      }
+    } else {
+      if (img1.toLowerCase().includes("outline")) {
+        return [img1, img2];
+      } else if (img2.toLowerCase().includes("outline")) {
+        return [img2, img1];
+      } else {
+        console.log("new case", possibleOutlineImages, imgs);
+      }
+    }
+  } catch (e) {
+    console.log("error", imgs, e);
+  }
+  return ["", ""];
+};
+
 export default function FurnitureItem({ item }) {
-  const firstPageBottomImages = item.img.slice(2, 4);
-  const secondPageMiddleImages = item.img.slice(4, 6);
-  const secondPageTopImage = item.img[6];
-  const secondPageBottomImage = item.img[1];
-  const dimensionImage = item.img[7];
+  const [outlineShadowImage, outlinePreviewImage] = getOutLineImages(item.img);
+
+  const imgs = item.img.filter(
+    (img) => img !== outlinePreviewImage && img !== outlineShadowImage
+  );
+
+  const firstPageBottomImages = imgs.slice(2, 4);
+  const secondPageMiddleImages = imgs.slice(4);
+  const secondPageTopImage = imgs[1];
   const finishDetails = item.description[2].split(":");
   return (
     <div className="FurnitureItem">
@@ -61,14 +109,14 @@ export default function FurnitureItem({ item }) {
 
           <img
             className="FurnitureItem-Page2_BottomImage"
-            src={secondPageBottomImage}
+            src={outlinePreviewImage}
             alt="bottom page"
           ></img>
 
           <div className="FurnitureItem-Page2_RowFlexBox">
             <img
               className="FurnitureItem-Page2_DimensionImage"
-              src={dimensionImage}
+              src={outlineShadowImage}
               alt="bottom page"
             ></img>
             <div className="FurnitureItem_Line FurnitureItem-Page2_VerticalLine" />

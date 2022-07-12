@@ -111,13 +111,16 @@ body {
 }
 
 img.FurnitureItem-Page2_TopImage {
+  height: 25vh;
   object-fit: cover;
+  object-position: 0% 70%;
 }
 img.FurnitureItem-Page2_MiddleImages {
   width: 20.4vh;
 }
 img.FurnitureItem-Page2_BottomImage {
   width: 40vh;
+  height: 15vh;
   object-fit: cover;
 }
 img.FurnitureItem-Page2_DimensionImage {

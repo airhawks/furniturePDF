@@ -86,6 +86,12 @@ LIVING ROOM,SOFA	Flora Sofa	Rs.150,000.00	https://www.mordecor.in/wp-content/upl
 const json = furnitureListString.split("\n");
 const keys = json[0].split("\t");
 
+const faltuImages = [
+  "https://www.mordecor.in/wp-content/uploads/2019/07/JSL-LOGO.jpg",
+  "https://www.mordecor.in/wp-content/uploads/2019/07/download.jpg",
+  "https://www.mordecor.in/wp-content/uploads/2019/07/het.jpg"
+];
+
 const list = json.slice(1).map((row) => {
   const rowJson = row.split("\t");
   return keys.reduce((obj, key, index) => {
@@ -93,6 +99,10 @@ const list = json.slice(1).map((row) => {
     obj[key] = value.length === 1 ? value[0] : value;
     return obj;
   }, {});
+});
+
+list.forEach((item) => {
+  item.img = item.img.filter((img) => !faltuImages.includes(img));
 });
 
 export default list;
