@@ -81,8 +81,22 @@ const getOutLineImages = (imgs) => {
   return ["", ""];
 };
 
+const deadImages = {
+  "https://www.mordecor.in/wp-content/uploads/2020/12/Outline-4.jpg":
+    "https://www.mordecor.in/wp-content/uploads/2020/12/Outline_main-4.jpg",
+  "https://www.mordecor.in/wp-content/uploads/2020/12/outline.jpg":
+    "https://www.mordecor.in/wp-content/uploads/2021/01/Atlas-sofa.jpg"
+};
+
 export default function FurnitureItem({ item }) {
-  const [outlineShadowImage, outlinePreviewImage] = getOutLineImages(item.img);
+  // if (item.title.toUpperCase().includes("ATLAS")) {
+  //   console.log(item.img);
+  // }
+  let [outlineShadowImage, outlinePreviewImage] = getOutLineImages(item.img);
+
+  if (Object.keys(deadImages).includes(outlineShadowImage)) {
+    outlineShadowImage = deadImages[outlineShadowImage];
+  }
 
   const imgs = item.img.filter(
     (img) => img !== outlinePreviewImage && img !== outlineShadowImage
