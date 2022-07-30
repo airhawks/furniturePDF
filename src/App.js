@@ -16,9 +16,11 @@ import FurnitureItem from "./FurnitureItem";
 // );
 
 export default function App() {
+  let x = furnitureList;
+  // x = x.slice(0, 1);
   return (
     <div className="App">
-      {furnitureList.slice(0).map((item, index) => (
+      {x.map((item, index) => (
         <FurnitureItem item={item} key={index} />
       ))}
     </div>
