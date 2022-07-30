@@ -3,8 +3,20 @@ import "./styles.css";
 const hasStringOutLine = (img) =>
   img.toLowerCase().includes("outlie") || img.toLowerCase().includes("outline");
 
-const getOutLineImages = (imgs) => {
+const specialCases = (imgs, title) => {
+  return;
+  if (title.toUpperCase() === "CHARLIE ARM CHAIR") {
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2020/12/Charlie_ArmOutine.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2021/01/CharlieOutline_main4.jpg"
+    ];
+  }
+};
+
+const getOutLineImages = (imgs, title) => {
   let possibleOutlineImages;
+
+  possibleOutlineImages = specialCases(imgs);
   // try {
   possibleOutlineImages = imgs.filter(
     (img) =>
@@ -12,11 +24,12 @@ const getOutLineImages = (imgs) => {
         .match(/([^\/]+$)/)[0]
         .toLowerCase()
         .includes("zoom") &&
-      (hasStringOutLine(img) || img.includes("sofa"))
+      (hasStringOutLine(img) || img.toLowerCase().includes("chair"))
   );
+  // console.log("possibleOutlineImages ", possibleOutlineImages);
   if (possibleOutlineImages.length > 2) {
     const anotherPossibleOutlineImages = possibleOutlineImages.filter(
-      (x) => !x.includes("-sofa")
+      (x) => !x.includes("-chair")
     );
     if (anotherPossibleOutlineImages.length > 1) {
       possibleOutlineImages = anotherPossibleOutlineImages;
@@ -58,7 +71,7 @@ const getOutLineImages = (imgs) => {
     img2 = possibleOutlineImages[1];
 
   if (img1 == null || img2 == null) {
-    console.log("yaha pee", possibleOutlineImages, imgs);
+    console.error("yaha pee", possibleOutlineImages, imgs);
     return ["", ""];
   }
 
@@ -92,10 +105,16 @@ export default function FurnitureItem({ item }) {
   // if (item.title.toUpperCase().includes("ATLAS")) {
   //   console.log(item.img);
   // }
-  let [outlineShadowImage, outlinePreviewImage] = getOutLineImages(item.img);
+  let [outlineShadowImage, outlinePreviewImage] = getOutLineImages(
+    item.img,
+    item.title
+  );
 
   if (Object.keys(deadImages).includes(outlineShadowImage)) {
     outlineShadowImage = deadImages[outlineShadowImage];
+  }
+  if (!outlinePreviewImage) {
+    console.log(item, outlineShadowImage);
   }
 
   const imgs = item.img.filter(
@@ -118,6 +137,7 @@ export default function FurnitureItem({ item }) {
     item.description[2] = "FINISH :" + splits[1];
     finishDetails = ["FINISH", splits[1]];
   }
+
   return (
     <div className="FurnitureItem">
       <div className="FurnitureItem_ViewPortPage">
@@ -188,7 +208,7 @@ export default function FurnitureItem({ item }) {
               {item.dimensions.join(" | ")}
               {finishDetails.length > 1 ? (
                 <div className="FurnitureItem-Page2_Finish">
-                  <h3>{finishDetails[0] + ":"}</h3>
+                  <h3>{finishDetails[0] + ": "}</h3>
                   {finishDetails[1]}
                 </div>
               ) : null}

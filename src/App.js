@@ -1,5 +1,5 @@
 import "./styles.css";
-import furnitureList from "./furnitureList.js";
+import furnitureList from "./armChairList.js";
 import FurnitureItem from "./FurnitureItem";
 
 // const items = furnitureList.map((x) => x.img).flat();
@@ -18,7 +18,7 @@ import FurnitureItem from "./FurnitureItem";
 export default function App() {
   return (
     <div className="App">
-      {furnitureList.map((item, index) => (
+      {furnitureList.slice(0).map((item, index) => (
         <FurnitureItem item={item} key={index} />
       ))}
     </div>
