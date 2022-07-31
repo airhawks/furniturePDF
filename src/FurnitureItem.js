@@ -1,7 +1,9 @@
 import "./styles.css";
 
 const hasStringOutLine = (img) =>
-  img.toLowerCase().includes("outlie") || img.toLowerCase().includes("outline");
+  img.toLowerCase().includes("outlie") ||
+  img.toLowerCase().includes("outine") ||
+  img.toLowerCase().includes("outline");
 
 const hasStringProduct = (img) =>
   img.toLowerCase().includes("center") || img.toLowerCase().includes("table");
@@ -125,6 +127,41 @@ const specialCases = (imgs, title, link) => {
       "https://www.mordecor.in/wp-content/uploads/2020/12/helix-bar.jpg",
       "https://www.mordecor.in/wp-content/uploads/2021/01/6-6.jpg"
     ];
+  } else if (title.toUpperCase() === "STATEMENT BENCH") {
+    console.log(imgs, link);
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2019/07/Outline-Outline-statement.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2019/07/Statement-Bench.jpg"
+    ];
+  } else if (title === "Imperial Planter") {
+    // console.log(imgs, link);
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2019/09/104500Outline.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2019/09/ImperialPlanter.jpg"
+    ];
+  } else if (title === "Gloria Bed") {
+    // console.log(imgs, link);
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2020/12/Outlie-3.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2020/12/gloria-bed.jpg"
+    ];
+  } else if (title === "Shell Bed") {
+    // console.log(imgs, link);
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2020/09/Shell-bed_Outline1.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2020/09/opera-shiela-bed.jpg"
+    ];
+  } else if (title.toUpperCase() === "CLOVE BED") {
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2020/12/clove-bed.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2020/12/clove-bed.jpg"
+    ];
+  } else if (title.toUpperCase() === "CROSS BED") {
+    console.log(imgs, link);
+    return [
+      "https://www.mordecor.in/wp-content/uploads/2020/12/outline-2.jpg",
+      "https://www.mordecor.in/wp-content/uploads/2020/12/cross-bed.jpg"
+    ];
   }
 };
 
@@ -162,6 +199,9 @@ const getOutLineImages = (imgs, title, link) => {
       return [img1, img2];
     }
   } else if (possibleOutlineImages.length < 2) {
+    if (possibleOutlineImages.length === 0) {
+      console.log(imgs);
+    }
     let img = possibleOutlineImages[0];
 
     let name = img.match(/([^\/]+$)/)[0];
@@ -172,12 +212,16 @@ const getOutLineImages = (imgs, title, link) => {
     name = name.replace("_Outline-1", "");
     name = name.replace("_outline-1", "");
     name = name.replace("-Sideboard", "");
+    name = name.replace("_outine-1", "");
+    name = name.replace("-mirroroutline", "");
 
     name = name.replace("-Outline", "");
+    name = name.replace("-outline", "");
     name = name.replace("Outline-", "");
     name = name.replace("outline-", "");
     name = name.replace("_Outline", "");
     name = name.replace("_outline", "");
+
     name = name.replace("Outline_", "");
     name = name.replace("Outline", "");
     name = name.replace("-stool", "");
@@ -234,8 +278,8 @@ const deadImages = {
     "https://www.mordecor.in/wp-content/uploads/2020/12/Outline_main-4.jpg",
   "https://www.mordecor.in/wp-content/uploads/2020/12/outline.jpg":
     "https://www.mordecor.in/wp-content/uploads/2021/01/Atlas-sofa.jpg",
-  "https://www.mordecor.in/wp-content/uploads/2019/09/rectra-dining-table.jpg":
-    ""
+  "https://www.mordecor.in/wp-content/uploads/2020/12/outline-1.jpg":
+    "https://www.mordecor.in/wp-content/uploads/2020/12/clove-bed.jpg"
 };
 
 export default function FurnitureItem({ item }) {
